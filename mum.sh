@@ -10,6 +10,7 @@ fi
 env_file="/opt/marzban/.env"
 
 function mum-setup {
+    apt-get update && apt-get install curl socat git -y
     clear
     cd
     read -p "Are you ready to setup the MUM-Bot? (y/n): " pp
@@ -55,9 +56,26 @@ services:
       MUM_DB_NAME: marzban
       TZ: UTC
 EOF
-
-    
     fi
+}
+function mum-logs {
+    clear
+      cd
+      cd mum-bot    
+      docker compose logs -f
+}
+function mum-restart {
+    clear
+      cd
+      cd mum-bot    
+      docker compose down
+      docker compose up -d
+}
+function mum-stop {
+    clear
+      cd
+      cd mum-bot    
+      docker compose down
 }
 while true; do
 clear
