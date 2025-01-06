@@ -6,7 +6,7 @@ if [[ $EUID -ne 0 ]]; then
     echo "Use sudo -i to change user to root"
     exit 1
 fi
-function main_menu {
+function mum-setup {
     clear
     cd
     read -p "Are you ready to setup the MUM-Bot? (y/n): " pp
@@ -46,3 +46,24 @@ EOF
 
     
     fi
+}
+while true; do
+clear
+    echo "MUM-Bot SetUp"
+    echo "Menu:"
+    echo "1  - Install the Bot"
+    echo "2  - View Logs"
+    echo "3  - Restart The Bot"
+    echo "4  - Stop The Bot"
+    echo "5  - Exit"
+    read -p "Enter your choice: " choice
+    case $choice in
+        1) mum-setup;;
+        2) mum-logs;;
+        3) mum-restart;;
+        4) mum-stop;;
+        5) echo "Exiting..."; exit;;
+        *) echo "Invalid choice. Please enter a valid option.";;
+    esac
+done
+    
