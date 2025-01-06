@@ -56,6 +56,7 @@ services:
       MUM_DB_NAME: marzban
       TZ: UTC
 EOF
+        docker compose up -d
     fi
 }
 function mum-logs {
