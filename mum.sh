@@ -6,6 +6,9 @@ if [[ $EUID -ne 0 ]]; then
     echo "Use sudo -i to change user to root"
     exit 1
 fi
+# Define the file path
+env_file="/opt/marzban/.env"
+
 function mum-setup {
     clear
     cd
@@ -30,6 +33,15 @@ services:
     volumes:
       - ./data:/app/data
 EOF
+        # Extract the line containing SQLALCHEMY_DATABASE_URL
+        db_url=$(grep 'SQLALCHEMY_DATABASE_URL=' "$env_file")
+
+        # Extract the username and password using parameter expansion
+        db_url=${db_url#*mysql+pymysql://} # Remove the prefix
+        username=${db_url%%:*}             # Extract username before the colon
+        temp=${db_url#*:}                  # Remove username and colon
+        password=${temp%%@*}               # Extract password before the @ symbol
+        
       #Creating an Override File for Environment Variables
       cat <<EOF > docker-compose.override.yml
 services:
@@ -38,8 +50,8 @@ services:
       TELEGRAM_MUM_TOKEN: $tbt
       TELEGRAM_MUM_MAIN_ADMIN_ID: $tui
       MUM_DB_HOST: 127.0.0.1
-      MUM_DB_USER: <DATABASE_USERNAME>
-      MUM_DB_PASSWORD: <DATABASE_PASSWORD>
+      MUM_DB_USER: $username
+      MUM_DB_PASSWORD: $password
       MUM_DB_NAME: marzban
       TZ: UTC
 EOF
