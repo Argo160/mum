@@ -78,6 +78,14 @@ function mum-stop {
       cd mum-bot    
       docker compose down
 }
+function mum-updatep {
+    clear
+      cd
+      cd mum-bot    
+      docker compose down
+      docker compose pull mum-bot
+      docker compose up -d
+}
 while true; do
 clear
     echo "MUM-Bot SetUp"
@@ -86,14 +94,16 @@ clear
     echo "2  - View Logs"
     echo "3  - Restart The Bot"
     echo "4  - Stop The Bot"
-    echo "5  - Exit"
+    echo "5  - Update The Bot"
+    echo "6  - Exit"
     read -p "Enter your choice: " choice
     case $choice in
         1) mum-setup;;
         2) mum-logs;;
         3) mum-restart;;
         4) mum-stop;;
-        5) echo "Exiting..."; exit;;
+        5) mum-updatep;;
+        6) echo "Exiting..."; exit;;
         *) echo "Invalid choice. Please enter a valid option.";;
     esac
 done
