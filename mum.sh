@@ -85,7 +85,7 @@ function mum-restart {
         read -n 1 -s -r -p "Press any key to continue"
     else
       cd mum-bot    
-      docker compose down
+      docker compose stop
       docker compose up -d
     fi
 }
@@ -97,7 +97,7 @@ function mum-stop {
         read -n 1 -s -r -p "Press any key to continue"
     else
       cd mum-bot    
-      docker compose down
+      docker compose stop
     fi
 }
 function mum-updatep {
@@ -124,6 +124,17 @@ function mum-config {
       nano ./data/config.json
     fi
 }
+function mum-remove {
+    clear
+    cd
+    if [ ! -d "mum-bot" ]; then
+        echo "the bot is not installed yet"
+        read -n 1 -s -r -p "Press any key to continue"
+    else
+        docker compose down -v
+        rm -rf /mum-bot
+    fi
+}
 
 while true; do
 clear
@@ -135,7 +146,8 @@ clear
     echo "4  - Stop The Bot"
     echo "5  - Update The Bot"
     echo "6  - View and Edit the Config"
-    echo "7  - Exit"
+    echo "7  - Remove the mum-bot"
+    echo "8  - Exit"
     read -p "Enter your choice: " choice
     case $choice in
         1) mum-setup;;
@@ -144,7 +156,8 @@ clear
         4) mum-stop;;
         5) mum-updatep;;
         6) mum-config;;
-        7) echo "Exiting..."; exit;;
+        7) mum-remove;;
+        8) echo "Exiting..."; exit;;
         *) echo "Invalid choice. Please enter a valid option.";;
     esac
 done
