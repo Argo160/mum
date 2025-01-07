@@ -14,6 +14,7 @@ function mum-setup {
     cd
     if [ -f "mum-bot/docker-compose.yml" ] && [ -f "mum-bot/docker-compose.override.yml" ]; then
         echo "mum-bot already installed."
+        read -n 1 -s -r -p "Press any key to continue"
         return 0
     else
         apt-get update -y
@@ -112,6 +113,18 @@ function mum-updatep {
       docker compose up -d
     fi
 }
+function mum-config {
+    clear
+    cd
+    if [ ! -d "mum-bot" ]; then
+        echo "the bot is not installed yet"
+        read -n 1 -s -r -p "Press any key to continue"
+    else
+      cd mum-bot    
+      nano ./data/config.json
+    fi
+}
+
 while true; do
 clear
     echo "MUM-Bot SetUp"
@@ -121,7 +134,8 @@ clear
     echo "3  - Restart The Bot"
     echo "4  - Stop The Bot"
     echo "5  - Update The Bot"
-    echo "6  - Exit"
+    echo "6  - View and Edit the Config"
+    echo "7  - Exit"
     read -p "Enter your choice: " choice
     case $choice in
         1) mum-setup;;
@@ -129,7 +143,8 @@ clear
         3) mum-restart;;
         4) mum-stop;;
         5) mum-updatep;;
-        6) echo "Exiting..."; exit;;
+        6) mum-config;;
+        7) echo "Exiting..."; exit;;
         *) echo "Invalid choice. Please enter a valid option.";;
     esac
 done
