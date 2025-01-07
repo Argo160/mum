@@ -67,30 +67,50 @@ EOF
 }
 function mum-logs {
     clear
-      cd
-      cd mum-bot    
-      docker compose logs -f
+    cd
+    if [ ! -d "mum-bot" ]; then
+        echo "the bot is not installed yet"
+        read -n 1 -s -r -p "Press any key to continue"
+    else
+        cd mum-bot    
+        docker compose logs -f
+    fi      
 }
 function mum-restart {
     clear
       cd
+    if [ ! -d "mum-bot" ]; then
+        echo "the bot is not installed yet"
+        read -n 1 -s -r -p "Press any key to continue"
+    else
       cd mum-bot    
       docker compose down
       docker compose up -d
+    fi
 }
 function mum-stop {
     clear
-      cd
+    cd
+    if [ ! -d "mum-bot" ]; then
+        echo "the bot is not installed yet"
+        read -n 1 -s -r -p "Press any key to continue"
+    else
       cd mum-bot    
       docker compose down
+    fi
 }
 function mum-updatep {
     clear
-      cd
+    cd
+    if [ ! -d "mum-bot" ]; then
+        echo "the bot is not installed yet"
+        read -n 1 -s -r -p "Press any key to continue"
+    else
       cd mum-bot    
       docker compose down
       docker compose pull mum-bot
       docker compose up -d
+    fi
 }
 while true; do
 clear
