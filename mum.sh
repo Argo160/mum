@@ -10,13 +10,22 @@ fi
 env_file="/opt/marzban/.env"
 
 function mum-setup {
-    apt-get update && apt-get install curl socat git -y
     clear
     cd
     if [ -f "mum-bot/docker-compose.yml" ] && [ -f "mum-bot/docker-compose.override.yml" ]; then
         echo "mum-bot already installed."
         return 0
     else
+        apt-get update -y
+        if ! command -v curl &> /dev/null; then
+            apt-get install curl -y
+        fi
+        if ! command -v socat &> /dev/null; then
+            apt-get install socat -y
+        fi
+        if ! command -v socat &> /dev/null; then
+            apt-get install git -y
+        fi           
         cd
         mkdir mum-bot
         cd mum-bot
