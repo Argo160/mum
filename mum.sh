@@ -13,18 +13,17 @@ function mum-setup {
     apt-get update && apt-get install curl socat git -y
     clear
     cd
-    read -p "Are you ready to setup the MUM-Bot? (y/n): " pp
-    # Convert input to lowercase
-    pp_lowercase=$(echo "$pp" | tr '[:upper:]' '[:lower:]')
-    # Check if the input is "y"
-    if [ "$pp_lowercase" = "y" ]; then
-      cd
-      mkdir mum-bot
-      cd mum-bot
-      read -p "Enter your telegram bot token: " tbt
-      read -p "Enter your telegram user ID: " tui
-      #Creating a Docker Compose File
-      cat <<EOF > docker-compose.yml
+    if [ -f "mum-bot/docker-compose.yml" ] && [ -f "mum-bot/docker-compose.override.yml" ]; then
+        echo "mum-bot already installed."
+        return 0
+    else
+        cd
+        mkdir mum-bot
+        cd mum-bot
+        read -p "Enter your telegram bot token: " tbt
+        read -p "Enter your telegram User ID: " tui
+        #Creating a Docker Compose File
+        cat <<EOF > docker-compose.yml
 services:
   mum-bot:
     container_name: mum-bot
@@ -36,15 +35,13 @@ services:
 EOF
         # Extract the line containing SQLALCHEMY_DATABASE_URL
         db_url=$(grep 'SQLALCHEMY_DATABASE_URL=' "$env_file")
-
         # Extract the username and password using parameter expansion
         db_url=${db_url#*mysql+pymysql://} # Remove the prefix
         username=${db_url%%:*}             # Extract username before the colon
         temp=${db_url#*:}                  # Remove username and colon
         password=${temp%%@*}               # Extract password before the @ symbol
-        
-      #Creating an Override File for Environment Variables
-      cat <<EOF > docker-compose.override.yml
+        #Creating an Override File for Environment Variables
+        cat <<EOF > docker-compose.override.yml
 services:
   mum-bot:
     environment:
